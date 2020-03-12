@@ -29,7 +29,6 @@
     <Folder Include="Tenants\" />
     <Folder Include="Stats\" />
     <Folder Include="UsersByEmail\" />
-    <Folder Include="Users\" />
     <Folder Include="RulesConfigs\" />
     <Folder Include="Rules\" />
     <Folder Include="Roles\" />

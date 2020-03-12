@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Auth0.Management.ClientGrants;
+using Auth0.Management.Users;
 
 namespace Auth0.Management
 {
@@ -29,7 +30,7 @@ namespace Auth0.Management
 
         public BrandingApi Branding => new BrandingApi(this);
         public ClientGrantsApi ClientGrants => new ClientGrantsApi(this);
-
+        public UsersApi Users => new UsersApi(this);
 
         internal async Task<T> HandleResponseAsync<T>(HttpResponseMessage response, CancellationToken cancellationToken = default)
         {
