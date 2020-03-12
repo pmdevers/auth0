@@ -17,21 +17,33 @@ namespace Auth0.Management.Branding
             _client = client;
         }
 
+        /// <summary>
+        /// Get branding settings
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns>
+        /// Retrieve branding settings.
+        /// </returns>
         public async Task<BrandingResponse> GetAsync(CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var response = await _client.HttpClient.GetAsync("/api/branding", cancellationToken);
+            var response = await _client.HttpClient.GetAsync("/api/v2/branding", cancellationToken);
             return await _client.HandleResponseAsync<BrandingResponse>(response, cancellationToken);
         }
 
-        public async Task<bool> UpdateAsync(UpdateBrandingRequest request, CancellationToken cancellationToken = default)
+        /// <summary>
+        /// Update branding settings
+        /// </summary>
+        /// <param name="request">Branding settings</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>
+        /// returns <c>true</c> if succesfull
+        /// </returns>
+        public async Task<bool> UpdateAsync(BrandingRequest request, CancellationToken cancellationToken = default)
         {
             var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
-            var response = await _client.HttpClient.PatchAsync("/api/branding", content, cancellationToken);
-            if (response.IsSuccessStatusCode)
-                return true;
-
-            return false;
+            var response = await _client.HttpClient.PatchAsync("/api/v2/branding", content, cancellationToken);
+            return response.IsSuccessStatusCode;
         }
     }
 }

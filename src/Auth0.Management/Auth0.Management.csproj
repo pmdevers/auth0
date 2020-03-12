@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ClientGrants\" />
     <Folder Include="Clients\" />
     <Folder Include="Connections\" />
     <Folder Include="CusomDomains\" />

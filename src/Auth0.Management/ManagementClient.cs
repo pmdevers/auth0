@@ -7,10 +7,17 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
+using Auth0.Management.ClientGrants;
+
 namespace Auth0.Management
 {
     public class ManagementClient
     {
+        public JsonSerializerOptions Options => new JsonSerializerOptions()
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        };
+
         public ManagementClient(HttpClient client, ILogger<ManagementClient> logger)
         {
             HttpClient = client;
@@ -21,6 +28,7 @@ namespace Auth0.Management
         public ILogger Logger { get; }
 
         public BrandingApi Branding => new BrandingApi(this);
+        public ClientGrantsApi ClientGrants => new ClientGrantsApi(this);
 
 
         internal async Task<T> HandleResponseAsync<T>(HttpResponseMessage response, CancellationToken cancellationToken = default)
@@ -29,7 +37,8 @@ namespace Auth0.Management
             var stream = await response.Content.ReadAsStreamAsync();
             if (response.IsSuccessStatusCode)
             {
-                return await JsonSerializer.DeserializeAsync<T>(stream, null, cancellationToken);
+                var result = await JsonSerializer.DeserializeAsync<T>(stream, Options, cancellationToken);
+                return result;
             }
             else
             {
