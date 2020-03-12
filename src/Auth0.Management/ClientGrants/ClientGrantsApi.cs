@@ -47,6 +47,14 @@ namespace Auth0.Management.ClientGrants
             return respose.IsSuccessStatusCode;
         }
 
+        public async Task<ClientGrantsResponse> UpdateAsync(string id, UpdateClientGrantRequest request, CancellationToken cancellationToken = default)
+        {
+            var content = JsonSerializer.Serialize(request, _client.Options);
+            var response = await _client.HttpClient.PatchAsync($"api/v2/client-grants/{id}", 
+                new StringContent(content, Encoding.UTF8, "application/json"), cancellationToken);
+            return await _client.HandleResponseAsync<ClientGrantsResponse>(response, cancellationToken);
+        }
+
         private async Task<HttpResponseMessage> GetImplAsync(int itemsPerPage = 25, int page = 0, bool includeTotals = false, string audience = "", string clientId = "")
         {
             var query = new NameValueCollection();

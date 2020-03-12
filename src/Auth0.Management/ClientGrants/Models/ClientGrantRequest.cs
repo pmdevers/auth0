@@ -10,6 +10,6 @@ namespace Auth0.Management.ClientGrants.Models
         [JsonPropertyName("client_id")]
         public string ClientId { get; set; }
         public string Audience { get; set; }
-        public List<string> Scope { get; set; } = new List<string>();
+        public string[] Scope { get; set; }
     }
 }

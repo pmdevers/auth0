@@ -76,5 +76,28 @@ namespace Auth0.Management.Tests
             var result = await client.ClientGrants.CreateAsync(new ClientGrantRequest() { Audience = "test", ClientId = "test" });
             Assert.True(result);
         }
+
+        [Fact]
+        public async Task Delete_Client_Grants_OK()
+        {
+            var client = TestsHelper.GetClient(null, HttpStatusCode.NoContent);
+            var result = await client.ClientGrants.DeleteAsync(Guid.NewGuid().ToString());
+            Assert.True(result);
+        }
+
+        [Fact]
+        public async Task Update_Client_Grants_OK()
+        {
+            var response = new ClientGrantsResponse()
+            {
+                Audience = Guid.NewGuid().ToString(),
+                ClientId = Guid.NewGuid().ToString(),
+                Id = Guid.NewGuid().ToString()
+            };
+            var client = TestsHelper.GetClient(response, HttpStatusCode.OK);
+            var request = new UpdateClientGrantRequest() { Scope = new[] { Guid.NewGuid().ToString() } };
+            var result = await client.ClientGrants.UpdateAsync(Guid.NewGuid().ToString(),request); 
+            Assert.IsType<ClientGrantsResponse>(response);
+        }
     }
 }
