@@ -43,13 +43,11 @@ namespace Auth0.Management
             }
             else
             {
-                using (var sr = new StreamReader(stream))
-                {
-                    var message = await sr.ReadToEndAsync();
-                    var exception = new ManagementClientException(response.StatusCode, message);
-                    Logger.LogError((int)response.StatusCode, exception, message);
-                    throw exception;
-                }
+                using var sr = new StreamReader(stream);
+                var message = await sr.ReadToEndAsync();
+                var exception = new ManagementClientException(response.StatusCode, message);
+                Logger.LogError((int)response.StatusCode, exception, message);
+                throw exception;
             }
         }
 	}

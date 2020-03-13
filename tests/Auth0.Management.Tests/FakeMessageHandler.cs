@@ -9,7 +9,7 @@ namespace Auth0.Management.Tests
 {
     public class FakeHttpMessageHandler : DelegatingHandler
     {
-        private HttpResponseMessage _fakeResponse;
+        private readonly HttpResponseMessage _fakeResponse;
 
         public FakeHttpMessageHandler(HttpResponseMessage responseMessage)
         {

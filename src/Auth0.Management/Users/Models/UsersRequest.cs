@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace Auth0.Management.Users.Models
 {
-    public class CreateUsersRequest
+    public class UsersRequest
     {
         public string Email { get; set; }
         [JsonPropertyName("phone_number")]
@@ -29,6 +29,12 @@ namespace Auth0.Management.Users.Models
         [JsonPropertyName("verify_email")]
         public bool VerifyEmail { get; set; }
         public string Username { get; set; }
+
+        [JsonPropertyName("user_metadata")]
+        public object UserMetaData { get; set; }
+
+        [JsonPropertyName("app_metadata")]
+        public object AppMetaData { get; set; }
     }
 
 }

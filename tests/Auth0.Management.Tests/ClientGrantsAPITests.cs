@@ -97,7 +97,7 @@ namespace Auth0.Management.Tests
             var client = TestsHelper.GetClient(response, HttpStatusCode.OK);
             var request = new UpdateClientGrantRequest() { Scope = new[] { Guid.NewGuid().ToString() } };
             var result = await client.ClientGrants.UpdateAsync(Guid.NewGuid().ToString(),request); 
-            Assert.IsType<ClientGrantsResponse>(response);
+            Assert.IsType<ClientGrantsResponse>(result);
         }
     }
 }

@@ -53,6 +53,12 @@ namespace Auth0.Management.Users.Models
         [JsonPropertyName("family_name")]
         public string FamilyName { get; set; }
 
+        [JsonPropertyName("user_metadata")]
+        public object UserMetaData { get; set; }
+
+        [JsonPropertyName("app_metadata")]
+        public object AppMetaData { get; set; }
+
     }
 
     public class Identity
