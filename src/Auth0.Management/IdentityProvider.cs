@@ -1,0 +1,73 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Auth0.Management
+{
+    public struct IdentityProvider
+    {
+        public string Value { get; }
+
+        Ad,
+        Adfs,
+        Amazon,
+        Apple,
+        Dropbox,
+        Bitbucket,
+        Aol,
+        Auth0Adldap,
+        Auth0Oidc,
+        Auth0,
+        Baidu,
+        Bitly,
+        Box,
+        Custom,
+        Daccount,
+        Dwolla,
+        Email,
+        EvernoteSandbox,
+        Evernote,
+        Exact,
+        Facebook,
+        Fitbit,
+        Flickr,
+        Github,
+        GoogleApps,
+        GoogleOauth2,
+        Instagram,
+        Ip,
+        Linkedin,
+        Miicard,
+        Oauth1,
+        Oauth2,
+        Office365,
+        Oidc,
+        Paypal,
+        PaypalSandbox,
+        Pingfederate,
+        Planningcenter,
+        Renren,
+        SalesforceCommunity,
+        SalesforceSandbox,
+        Salesforce,
+        Samlp,
+        Sharepoint,
+        Shopify,
+        Sms,
+        soundcloud,
+        ThecitySandbox,
+        Thecity,
+        Thirtysevensignals,
+        Twitter,
+        Untappd,
+        Vkontakte,
+        Waad,
+        Weibo,
+        Windowslive,
+        Wordpress,
+        Yahoo,
+        Yammer,
+        Yandex,
+        Line
+    }
+}

@@ -68,28 +68,6 @@ namespace Auth0.Management.Users
             return await _client.HandleResponseAsync<PagedUserLogResponse>(response, cancellationToken);
         }
 
-        private async Task<HttpResponseMessage> GetLogsImplAsync(string id, int itemsPerPage = 25, int page = 0, bool includeTotals = false, string sort = "",
-            CancellationToken cancellationToken = default)
-        {
-            var query = new NameValueCollection();
-
-            if (itemsPerPage != 0)
-            {
-                query.Add("per_page", itemsPerPage.ToString());
-                query.Add("page", page.ToString());
-            }
-
-            query.Add("include_totals", includeTotals.ToString().ToLower());
-
-            if (!string.IsNullOrEmpty(sort))
-            {
-                query.Add("sort", sort);
-            }
-
-            var querystring = query.ToQueryString();
-            return await _client.HttpClient.GetAsync($"api/v2/users/{id}/logs" + querystring, cancellationToken);
-        }
-
         public async Task<EnrollmentsResponse[]> GetEnrollmentsAsync(string id,
             CancellationToken cancellationToken = default)
         {
@@ -158,5 +136,48 @@ namespace Auth0.Management.Users
             await _client.HandleErrorAsync(response, cancellationToken);
             return response.IsSuccessStatusCode;
         }
+
+        public async Task<bool> DeleteMultifactorProvider(string id, MultifactorProvider provider,
+            CancellationToken cancellationToken = default)
+        {
+            var response = await _client.HttpClient.DeleteAsync($"api/v2/users/{id}/provider/{provider}", cancellationToken);
+            await _client.HandleErrorAsync(response, cancellationToken);
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<DeleteIdentityResponse[]> DeleteIdentityAsync(string id, IdentityProvider provider, string userId, CancellationToken cancellationToken = default)
+        {
+            var p = _client.GetIdentityProviderString(provider);
+            var response = await _client.HttpClient.DeleteAsync($"api/v2/users/{id}/provider/{p}/{userId}", cancellationToken);
+            await _client.HandleErrorAsync(response, cancellationToken);
+            var stream = await response.Content.ReadAsStreamAsync();
+            return await JsonSerializer.DeserializeAsync<DeleteIdentityResponse[]>(stream, _client.Options,
+                cancellationToken);
+        }
+
+        private async Task<HttpResponseMessage> GetLogsImplAsync(string id, int itemsPerPage = 25, int page = 0, bool includeTotals = false, string sort = "",
+            CancellationToken cancellationToken = default)
+        {
+            var query = new NameValueCollection();
+
+            if (itemsPerPage != 0)
+            {
+                query.Add("per_page", itemsPerPage.ToString());
+                query.Add("page", page.ToString());
+            }
+
+            query.Add("include_totals", includeTotals.ToString().ToLower());
+
+            if (!string.IsNullOrEmpty(sort))
+            {
+                query.Add("sort", sort);
+            }
+
+            var querystring = query.ToQueryString();
+            return await _client.HttpClient.GetAsync($"api/v2/users/{id}/logs" + querystring, cancellationToken);
+        }
+
+
+       
     }
 }

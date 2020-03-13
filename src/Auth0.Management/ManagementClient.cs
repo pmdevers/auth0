@@ -57,5 +57,34 @@ namespace Auth0.Management
             Logger.LogError((int)response.StatusCode, exception, message);
             throw exception;
         }
-	}
+
+        public string GetIdentityProviderString(IdentityProvider provider)
+        {
+            switch (provider)
+            {
+                case IdentityProvider.EvernoteSandbox:
+                    return "evernote-sandbox";
+                case IdentityProvider.GoogleApps:
+                    return "google-apps";
+                case IdentityProvider.GoogleOauth2:
+                    return "google-oauth2";
+                case IdentityProvider.PaypalSandbox:
+                    return "paypal-sandbox";
+                case IdentityProvider.SalesforceCommunity:
+                    return "salesforce-community";
+                case IdentityProvider.SalesforceSandbox:
+                    return "salesforce-sandbox";
+                case IdentityProvider.ThecitySandbox:
+                    return "thecity-sandbox";
+                case IdentityProvider.Auth0Adldap:
+                    return "auth0-adldap";
+                case IdentityProvider.Auth0Oidc:
+                    return "auth0-oidc";
+                default:
+                {
+                    return provider.ToString().ToLower();
+                }
+            }
+        }
+    }
 }
