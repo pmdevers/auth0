@@ -35,20 +35,27 @@ namespace Auth0.Management
         internal async Task<T> HandleResponseAsync<T>(HttpResponseMessage response, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
+
+            await HandleErrorAsync(response, cancellationToken);
+
             var stream = await response.Content.ReadAsStreamAsync();
+            var result = await JsonSerializer.DeserializeAsync<T>(stream, Options, cancellationToken);
+            return result;
+        }
+
+        internal async Task HandleErrorAsync(HttpResponseMessage response, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
             if (response.IsSuccessStatusCode)
-            {
-                var result = await JsonSerializer.DeserializeAsync<T>(stream, Options, cancellationToken);
-                return result;
-            }
-            else
-            {
-                using var sr = new StreamReader(stream);
-                var message = await sr.ReadToEndAsync();
-                var exception = new ManagementClientException(response.StatusCode, message);
-                Logger.LogError((int)response.StatusCode, exception, message);
-                throw exception;
-            }
+                return;
+
+            var stream = await response.Content.ReadAsStreamAsync();
+            using var sr = new StreamReader(stream);
+            var message = await sr.ReadToEndAsync();
+            var exception = new ManagementClientException(response.StatusCode, message);
+            Logger.LogError((int)response.StatusCode, exception, message);
+            throw exception;
         }
 	}
 }

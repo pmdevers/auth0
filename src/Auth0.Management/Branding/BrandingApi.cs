@@ -43,6 +43,7 @@ namespace Auth0.Management.Branding
         {
             var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
             var response = await _client.HttpClient.PatchAsync("/api/v2/branding", content, cancellationToken);
+            await _client.HandleErrorAsync(response, cancellationToken);
             return response.IsSuccessStatusCode;
         }
     }
