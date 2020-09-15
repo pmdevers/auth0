@@ -24,6 +24,7 @@ namespace Auth0.Management.ClientGrants
         public async Task<ClientGrantsResponse[]> GetAsync(string audience = "", string clientId = "", CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
+            await _client.SetAuthHeader();
             var response = await GetImplAsync(0, 0, false, audience, clientId, cancellationToken);
             return await _client.HandleResponseAsync<ClientGrantsResponse[]>(response, cancellationToken);
         }
@@ -32,6 +33,7 @@ namespace Auth0.Management.ClientGrants
             CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
+            await _client.SetAuthHeader();
             var response = await GetImplAsync(itemsPerPage, page, true, audience, clientId, cancellationToken);
             return await _client.HandleResponseAsync<ClientGrantsPagedResponse>(response, cancellationToken);
         }
@@ -39,6 +41,7 @@ namespace Auth0.Management.ClientGrants
         public async Task<bool> CreateAsync(ClientGrantRequest request, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
+            await _client.SetAuthHeader();
             var content = JsonSerializer.Serialize(request, _client.Options);
             var response = await _client.HttpClient.PostAsync("api/v2/client-grants",
                 new StringContent(content, Encoding.UTF8, "application/json"), cancellationToken);
@@ -49,6 +52,7 @@ namespace Auth0.Management.ClientGrants
         public async Task<bool> DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
+            await _client.SetAuthHeader();
             var response = await _client.HttpClient.DeleteAsync($"api/v2/client-grants/{id}", cancellationToken);
             await _client.HandleErrorAsync(response, cancellationToken);
             return response.IsSuccessStatusCode;
@@ -57,6 +61,7 @@ namespace Auth0.Management.ClientGrants
         public async Task<ClientGrantsResponse> UpdateAsync(string id, UpdateClientGrantRequest request, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
+            await _client.SetAuthHeader();
             var content = JsonSerializer.Serialize(request, _client.Options);
             var response = await _client.HttpClient.PatchAsync($"api/v2/client-grants/{id}", 
                 new StringContent(content, Encoding.UTF8, "application/json"), cancellationToken);
@@ -86,6 +91,7 @@ namespace Auth0.Management.ClientGrants
             }
 
             var querystring = query.ToQueryString();
+            await _client.SetAuthHeader();
             return await _client.HttpClient.GetAsync("api/v2/client-grants" + querystring, cancellationToken);
         }
 

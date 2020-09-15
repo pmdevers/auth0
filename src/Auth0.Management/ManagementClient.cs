@@ -3,11 +3,14 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-
+using Auth0.Management.Authorization;
+using Auth0.Management.Authorization.Models;
 using Auth0.Management.ClientGrants;
+using Auth0.Management.Infrastructure;
 using Auth0.Management.Users;
 
 namespace Auth0.Management
@@ -16,21 +19,36 @@ namespace Auth0.Management
     {
         public JsonSerializerOptions Options => new JsonSerializerOptions()
         {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            PropertyNameCaseInsensitive = false,
         };
 
-        public ManagementClient(HttpClient client, ILogger<ManagementClient> logger)
+        public ManagementClient(HttpClient client, ILogger<ManagementClient> logger, ManagementClientSettings settings)
         {
             HttpClient = client;
             Logger = logger;
+            Settings = settings;
         }
+
+        private GetTokenResponse _currentToken;
 
         public HttpClient HttpClient { get; }
         public ILogger Logger { get; }
+        public ManagementClientSettings Settings { get; }
 
+        public AuthorizationApi Authorization => new AuthorizationApi(this);
         public BrandingApi Branding => new BrandingApi(this);
         public ClientGrantsApi ClientGrants => new ClientGrantsApi(this);
         public UsersApi Users => new UsersApi(this);
+
+        internal async Task SetAuthHeader(CancellationToken cancellationToken = default)
+        {
+            if(_currentToken == null)
+                _currentToken = await Authorization.GetTokenAsync(cancellationToken);
+
+            HttpClient.DefaultRequestHeaders.Remove("Authorization");
+            HttpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {_currentToken.AccessToken}");
+        }
 
         internal async Task<T> HandleResponseAsync<T>(HttpResponseMessage response, CancellationToken cancellationToken = default)
         {

@@ -11,8 +11,9 @@ namespace Microsoft.Extensions.DependencyInjection
             var s = new ManagementClientSettings();
             settings?.Invoke(s);
 
-            return services.AddHttpClient<ManagementClient>(builder => { 
-                builder.DefaultRequestHeaders.Add("Authorization", $"Bearer {s.ApiToken}");
+            services.AddSingleton(s);
+
+            return services.AddHttpClient<ManagementClient>(builder => {
                 builder.BaseAddress = s.Domain;
             });
         }

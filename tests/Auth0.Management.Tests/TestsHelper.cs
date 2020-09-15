@@ -4,7 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
-
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Auth0.Management.Tests
@@ -21,11 +21,13 @@ namespace Auth0.Management.Tests
             var services = new ServiceCollection();
             
             services.AddAuthManagement(opt =>
-                    {
-                        opt.ApiToken = "Fake Api Token";
-                        opt.Domain = new Uri("http://fake.auth0.com");
-                    })
-                    .AddHttpMessageHandler(() => new FakeHttpMessageHandler(response));
+                {
+                    opt.ClientId = "Fake Client Id";
+                    opt.ClientSecret = "Fake Secret";
+                    opt.Audience = new Uri("http://fake.auth0.com");
+                    opt.Domain = new Uri("http://fake.auth0.com");
+                })
+                .AddHttpMessageHandler(() => new FakeHttpMessageHandler(response));
 
             var provider = services.BuildServiceProvider();
 

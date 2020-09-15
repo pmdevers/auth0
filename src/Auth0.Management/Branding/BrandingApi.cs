@@ -27,6 +27,7 @@ namespace Auth0.Management.Branding
         public async Task<BrandingResponse> GetAsync(CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
+            await _client.SetAuthHeader();
             var response = await _client.HttpClient.GetAsync("/api/v2/branding", cancellationToken);
             return await _client.HandleResponseAsync<BrandingResponse>(response, cancellationToken);
         }
@@ -41,6 +42,8 @@ namespace Auth0.Management.Branding
         /// </returns>
         public async Task<bool> UpdateAsync(BrandingRequest request, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+            await _client.SetAuthHeader();
             var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
             var response = await _client.HttpClient.PatchAsync("/api/v2/branding", content, cancellationToken);
             await _client.HandleErrorAsync(response, cancellationToken);

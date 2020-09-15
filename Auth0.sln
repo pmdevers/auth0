@@ -5,7 +5,11 @@ VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Auth0.Management", "src\Auth0.Management\Auth0.Management.csproj", "{B8BFB52F-AB97-4C8F-93D8-3B2B3E561857}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auth0.Management.Tests", "tests\Auth0.Management.Tests\Auth0.Management.Tests.csproj", "{A686F3F4-5AD7-4DEA-9049-5AD0D02F8964}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Auth0.Management.Tests", "tests\Auth0.Management.Tests\Auth0.Management.Tests.csproj", "{A686F3F4-5AD7-4DEA-9049-5AD0D02F8964}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{8A145159-7932-45DF-8953-65552A8573B4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1F0D7E7B-61D8-408A-B236-033BBB3DBA43}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,6 +28,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B8BFB52F-AB97-4C8F-93D8-3B2B3E561857} = {1F0D7E7B-61D8-408A-B236-033BBB3DBA43}
+		{A686F3F4-5AD7-4DEA-9049-5AD0D02F8964} = {8A145159-7932-45DF-8953-65552A8573B4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3173D57E-533A-4B7F-A657-31206E4C4EC5}

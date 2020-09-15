@@ -4,9 +4,9 @@ using System.Text;
 
 namespace Auth0.Management
 {
-    public struct IdentityProvider
+    public enum IdentityProvider
     {
-        public string Value { get; }
+
 
         Ad,
         Adfs,
