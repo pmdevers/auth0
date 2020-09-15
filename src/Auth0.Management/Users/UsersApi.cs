@@ -23,7 +23,7 @@ namespace Auth0.Management.Users
         public async Task<UsersResponse> GetAsync(string id, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            await _client.SetAuthHeader();
+            await _client.SetAuthHeaderAsync();
             var response = await _client.HttpClient.GetAsync($"api/v2/users/{id}", cancellationToken);
             return await _client.HandleResponseAsync<UsersResponse>(response, cancellationToken);
         }
@@ -31,7 +31,7 @@ namespace Auth0.Management.Users
         public async Task<UsersResponse> CreateAsync(UsersRequest request, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            await _client.SetAuthHeader();
+            await _client.SetAuthHeaderAsync();
             var content = JsonSerializer.Serialize(request, _client.Options);
             var response = await _client.HttpClient.PostAsync("api/v2/users",
                 new StringContent(content, Encoding.UTF8, "application/json"), cancellationToken);
@@ -41,7 +41,7 @@ namespace Auth0.Management.Users
         public async Task<bool> DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            await _client.SetAuthHeader();
+            await _client.SetAuthHeaderAsync();
             var response = await _client.HttpClient.DeleteAsync($"api/v2/users/{id}", cancellationToken);
             await _client.HandleErrorAsync(response, cancellationToken);
             return response.IsSuccessStatusCode;
@@ -50,7 +50,7 @@ namespace Auth0.Management.Users
         public async Task<UsersResponse> UpdateAsync(string id, UsersRequest request, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            await _client.SetAuthHeader();
+            await _client.SetAuthHeaderAsync();
             var content = JsonSerializer.Serialize(request, _client.Options);
             var response = await _client.HttpClient.PatchAsync($"api/v2/users/{id}",
                 new StringContent(content, Encoding.UTF8, "application/json"), cancellationToken);
@@ -60,7 +60,7 @@ namespace Auth0.Management.Users
         public async Task<UserLogResponse[]> GetLogsAsync(string id, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            await _client.SetAuthHeader();
+            await _client.SetAuthHeaderAsync();
             var response = await GetLogsImplAsync(id, 0, 0, false, string.Empty, cancellationToken);
             return await _client.HandleResponseAsync<UserLogResponse[]>(response, cancellationToken);
         }
@@ -69,7 +69,7 @@ namespace Auth0.Management.Users
             CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            await _client.SetAuthHeader();
+            await _client.SetAuthHeaderAsync();
             var response = await GetLogsImplAsync(id, itemsPerPage, page, true, sort, cancellationToken);
             return await _client.HandleResponseAsync<PagedUserLogResponse>(response, cancellationToken);
         }
@@ -78,7 +78,7 @@ namespace Auth0.Management.Users
             CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            await _client.SetAuthHeader();
+            await _client.SetAuthHeaderAsync();
             var response = await _client.HttpClient.GetAsync($"api/v2/users/{id}/enrollments", cancellationToken);
             return await _client.HandleResponseAsync<EnrollmentsResponse[]>(response, cancellationToken);
         }
@@ -86,7 +86,7 @@ namespace Auth0.Management.Users
         public async Task<UserRoleResponse[]> GetRolesAsync(string id, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            await _client.SetAuthHeader();
+            await _client.SetAuthHeaderAsync();
             var response = await _client.HttpClient.GetAsync($"api/users/{id}/roles", cancellationToken);
             return await _client.HandleResponseAsync<UserRoleResponse[]>(response, cancellationToken);
         }
@@ -95,7 +95,7 @@ namespace Auth0.Management.Users
             CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            await _client.SetAuthHeader();
+            await _client.SetAuthHeaderAsync();
             var content = new StringContent(JsonSerializer.Serialize(roles), Encoding.UTF8, "application/json");
             var response = await _client.HttpClient.PostAsync($"api/v2/users/{id}/roles", content, cancellationToken);
             await _client.HandleErrorAsync(response, cancellationToken);
@@ -105,7 +105,7 @@ namespace Auth0.Management.Users
         public async Task<bool> DeleteRolesAsync(string id, RolesRequest roles, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            await _client.SetAuthHeader();
+            await _client.SetAuthHeaderAsync();
             var content = new StringContent(JsonSerializer.Serialize(roles), Encoding.UTF8, "application/json");
             var request = new HttpRequestMessage(HttpMethod.Delete, $"api/v2/users/{id}/roles")
             {
@@ -119,7 +119,7 @@ namespace Auth0.Management.Users
         public async Task<PermissionRepsonse[]> GetPermissionsAsync(string id, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            await _client.SetAuthHeader();
+            await _client.SetAuthHeaderAsync();
             var request = await _client.HttpClient.GetAsync($"api/v2/users/{id}permissions", cancellationToken);
             return await _client.HandleResponseAsync<PermissionRepsonse[]>(request, cancellationToken);
         }
@@ -128,7 +128,7 @@ namespace Auth0.Management.Users
             CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            await _client.SetAuthHeader();
+            await _client.SetAuthHeaderAsync();
             var content = new StringContent(JsonSerializer.Serialize(permissions), Encoding.UTF8, "application/json");
             var response =
                 await _client.HttpClient.PostAsync($"api/v2/users/{id}/permissions", content, cancellationToken);
@@ -139,7 +139,7 @@ namespace Auth0.Management.Users
         public async Task<bool> DeletePermissionsAsync(string id, PermissionRequest permissions, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            await _client.SetAuthHeader();
+            await _client.SetAuthHeaderAsync();
             var content = new StringContent(JsonSerializer.Serialize(permissions), Encoding.UTF8, "application/json");
             var request = new HttpRequestMessage(HttpMethod.Delete, $"api/v2/users/{id}/permissions")
             {
@@ -153,7 +153,7 @@ namespace Auth0.Management.Users
         public async Task<bool> DeleteMultifactorProvider(string id, MultifactorProvider provider,
             CancellationToken cancellationToken = default)
         {
-            await _client.SetAuthHeader();
+            await _client.SetAuthHeaderAsync();
             var response = await _client.HttpClient.DeleteAsync($"api/v2/users/{id}/provider/{provider}", cancellationToken);
             await _client.HandleErrorAsync(response, cancellationToken);
             return response.IsSuccessStatusCode;
@@ -161,7 +161,7 @@ namespace Auth0.Management.Users
 
         public async Task<DeleteIdentityResponse[]> DeleteIdentityAsync(string id, IdentityProvider provider, string userId, CancellationToken cancellationToken = default)
         {
-            await _client.SetAuthHeader();
+            await _client.SetAuthHeaderAsync();
             var p = _client.GetIdentityProviderString(provider);
             var response = await _client.HttpClient.DeleteAsync($"api/v2/users/{id}/provider/{p}/{userId}", cancellationToken);
             await _client.HandleErrorAsync(response, cancellationToken);
@@ -189,7 +189,7 @@ namespace Auth0.Management.Users
             }
 
             var querystring = query.ToQueryString();
-            await _client.SetAuthHeader();
+            await _client.SetAuthHeaderAsync();
             return await _client.HttpClient.GetAsync($"api/v2/users/{id}/logs" + querystring, cancellationToken);
         }
 

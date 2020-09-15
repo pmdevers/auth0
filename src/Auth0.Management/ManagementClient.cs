@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Auth0.Management.Authorization;
 using Auth0.Management.Authorization.Models;
 using Auth0.Management.ClientGrants;
+using Auth0.Management.Clients;
 using Auth0.Management.Infrastructure;
 using Auth0.Management.Users;
 
@@ -39,9 +40,10 @@ namespace Auth0.Management
         public AuthorizationApi Authorization => new AuthorizationApi(this);
         public BrandingApi Branding => new BrandingApi(this);
         public ClientGrantsApi ClientGrants => new ClientGrantsApi(this);
+        public ClientsApi Clients => new ClientsApi(this);
         public UsersApi Users => new UsersApi(this);
 
-        internal async Task SetAuthHeader(CancellationToken cancellationToken = default)
+        internal async Task SetAuthHeaderAsync(CancellationToken cancellationToken = default)
         {
             if(_currentToken == null)
                 _currentToken = await Authorization.GetTokenAsync(cancellationToken);
