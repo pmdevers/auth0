@@ -2,6 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
+    <RootNamespace>Auth0.Management</RootNamespace>
+    <PackageId>PMDEvers.Auth0.Management</PackageId>
+    <Authors>Patrick Evers</Authors>
+    <Company>Patrick Evers</Company>
   </PropertyGroup>
 
   <ItemGroup>
