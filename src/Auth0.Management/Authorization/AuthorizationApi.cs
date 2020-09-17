@@ -11,8 +11,6 @@ namespace Auth0.Management.Authorization
     {
         private readonly ManagementClient _client;
 
-        public GetTokenResponse CurrentToken { get; private set; }
-
         public AuthorizationApi(ManagementClient client)
         {
             _client = client;
