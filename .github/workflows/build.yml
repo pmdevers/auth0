@@ -13,7 +13,7 @@ env:
   # Project name to pack and publish
   PROJECT_NAME: Auth0.Management
   # GitHub Packages Feed settings
-  GITHUB_FEED: https://nuget.pkg.github.com/pmdevers/
+  GITHUB_FEED: https://nuget.pkg.github.com/pmdevers/index.json
   GITHUB_USER: pmdevers
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   # Official NuGet Feed settings
