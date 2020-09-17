@@ -11,6 +11,7 @@ using Auth0.Management.Authorization;
 using Auth0.Management.Authorization.Models;
 using Auth0.Management.ClientGrants;
 using Auth0.Management.Clients;
+using Auth0.Management.Connections;
 using Auth0.Management.Infrastructure;
 using Auth0.Management.Users;
 
@@ -42,6 +43,7 @@ namespace Auth0.Management
         public ClientGrantsApi ClientGrants => new ClientGrantsApi(this);
         public ClientsApi Clients => new ClientsApi(this);
         public UsersApi Users => new UsersApi(this);
+        public ConnectionsApi Connections => new ConnectionsApi(this);
 
         internal async Task SetAuthHeaderAsync(CancellationToken cancellationToken = default)
         {

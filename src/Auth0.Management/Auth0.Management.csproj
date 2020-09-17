@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Connections\" />
     <Folder Include="CusomDomains\" />
     <Folder Include="DeviceCredentials\" />
     <Folder Include="Grants\" />

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Auth0.Management.Clients.Models;
@@ -16,6 +17,57 @@ namespace Auth0.Management.Clients
         public ClientsApi(ManagementClient client)
         {
             _client = client;
+        }
+
+        public async Task<GetClientsResponse> GetByIdAsync(string clientId, string fields = "", bool? includeFields = null, CancellationToken cancellationToken = default)
+        {
+            if(string.IsNullOrEmpty(clientId)) throw new ArgumentNullException(nameof(clientId));
+
+                cancellationToken.ThrowIfCancellationRequested();
+            var query = new NameValueCollection();
+
+            if (!string.IsNullOrEmpty(fields))
+            {
+                query.Add("fields", fields);
+
+                if (includeFields != null)
+                {
+                    query.Add("include_fields", includeFields.ToString().ToLower());
+                }
+            }
+
+            var querystring = query.ToQueryString();
+            await _client.SetAuthHeaderAsync(cancellationToken);
+            var results = await _client.HttpClient.GetAsync($"api/v2/clients/{clientId}" + querystring, cancellationToken);
+            return await _client.HandleResponseAsync<GetClientsResponse>(results, cancellationToken);
+        }
+
+        public async Task<bool> DeleteAsync(string clientId, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrEmpty(clientId)) throw new ArgumentNullException(nameof(clientId));
+            cancellationToken.ThrowIfCancellationRequested();
+            await _client.SetAuthHeaderAsync(cancellationToken);
+            var results = await _client.HttpClient.DeleteAsync($"api/v2/clients/{clientId}", cancellationToken);
+            return results.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> UpdateAsync(string clientId, UpdateClientRequest request, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrEmpty(clientId)) throw new ArgumentNullException(nameof(clientId));
+            cancellationToken.ThrowIfCancellationRequested();
+            await _client.SetAuthHeaderAsync(cancellationToken);
+            var content = JsonSerializer.Serialize(request, _client.Options);
+            var results = await _client.HttpClient.PatchAsync($"api/v2/clients/{clientId}", new StringContent(content, Encoding.UTF8, "application/json"),  cancellationToken);
+            return results.IsSuccessStatusCode;
+        }
+
+        public async Task<GetClientsResponse> RotateSecretAsync(string clientId, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrEmpty(clientId)) throw new ArgumentNullException(nameof(clientId));
+            cancellationToken.ThrowIfCancellationRequested();
+            await _client.SetAuthHeaderAsync(cancellationToken);
+            var results = await _client.HttpClient.PostAsync($"api/v2/clients/{clientId}", new StringContent(""), cancellationToken);
+            return await _client.HandleResponseAsync<GetClientsResponse>(results, cancellationToken);
         }
 
         public async Task<GetClientsResponse[]> GetAsync(CancellationToken cancellationToken = default)
@@ -38,7 +90,7 @@ namespace Auth0.Management.Clients
 
             if (!string.IsNullOrEmpty(fields))
             {
-                query.Add("fields", itemsPerPage.ToString());
+                query.Add("fields", fields);
 
                 if (includeFields != null)
                 {

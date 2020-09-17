@@ -18,6 +18,7 @@ namespace Auth0.Management.Clients.Models
     public class GetClientsResponse
     {
         public string tenant { get; set; }
+        public string description { get; set; }
         public bool global { get; set; }
         public bool is_token_endpoint_ip_header_trusted { get; set; }
         public string name { get; set; }
