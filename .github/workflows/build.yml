@@ -55,12 +55,10 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: nupkg
+      - name: Add Github feed
+        run: dotnet nuget add source $GITHUB_FEED -n github -u pmdevers -p GH_TOKEN
       - name: Push to GitHub Feed
-        run: |
-          for f in ./nupkg/*.nupkg
-          do
-            curl -vX PUT -u "$GITHUB_USER:$GITHUB_TOKEN" -F package=@$f $GITHUB_FEED
-          done
+        run: dotnet nuget push ./nupkg/*.nupkg --source "github"
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -71,6 +69,8 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 3.1.301
+      - name: Add Github feed
+        run: dotnet nuget add source $GITHUB_FEED -n github -u pmdevers -p GH_TOKEN
       - name: Create Release NuGet package
         run: |
           arrTag=(${GITHUB_REF//\// })
@@ -80,10 +80,6 @@ jobs:
           echo Clean Version: $VERSION
           dotnet pack -v normal -c Release --include-symbols --include-source -p:PackageVersion=$VERSION -o nupkg src/$PROJECT_NAME/$PROJECT_NAME.*proj
       - name: Push to GitHub Feed
-        run: |
-          for f in ./nupkg/*.nupkg
-          do
-            curl -vX PUT -u "$GITHUB_USER:$GITHUB_TOKEN" -F package=@$f $GITHUB_FEED
-          done
+        run: dotnet nuget push ./nupkg/*.nupkg ./nupkg/*.nupkg --source "github"
       - name: Push to NuGet Feed
         run: dotnet nuget push ./nupkg/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
