@@ -12,6 +12,7 @@ using Auth0.Management.Authorization.Models;
 using Auth0.Management.ClientGrants;
 using Auth0.Management.Clients;
 using Auth0.Management.Connections;
+using Auth0.Management.CusomDomains;
 using Auth0.Management.Infrastructure;
 using Auth0.Management.Users;
 
@@ -44,11 +45,11 @@ namespace Auth0.Management
         public ClientsApi Clients => new ClientsApi(this);
         public UsersApi Users => new UsersApi(this);
         public ConnectionsApi Connections => new ConnectionsApi(this);
+        public CustomDomainApi CustomDomains => new CustomDomainApi(this);
 
         internal async Task SetAuthHeaderAsync(CancellationToken cancellationToken = default)
         {
-            if(_currentToken == null)
-                _currentToken = await Authorization.GetTokenAsync(cancellationToken);
+            _currentToken ??= await Authorization.GetTokenAsync(cancellationToken);
 
             HttpClient.DefaultRequestHeaders.Remove("Authorization");
             HttpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {_currentToken.AccessToken}");
