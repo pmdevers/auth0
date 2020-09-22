@@ -26,9 +26,12 @@ namespace Auth0.Management.Tests
 
             var client = provider.GetService<ManagementClient>();
 
+            var users = await client.Users.GetAsync();
+
             var connections = await client.Connections.GetConnectionsAsync();
 
             var clients = await client.Clients.GetAsync();
+            
 
             var clientsb = await client.Clients.GetPagedAsync();
 

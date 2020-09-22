@@ -23,9 +23,18 @@ namespace Auth0.Management.Users
         public async Task<UsersResponse> GetAsync(string id, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            await _client.SetAuthHeaderAsync();
+            await _client.SetAuthHeaderAsync(cancellationToken);
             var response = await _client.HttpClient.GetAsync($"api/v2/users/{id}", cancellationToken);
             return await _client.HandleResponseAsync<UsersResponse>(response, cancellationToken);
+        }
+
+        public async Task<UserPagedResponse> GetAsync(int page = 0, int itemsPerPage = 25, string q = "", CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            await _client.SetAuthHeaderAsync(cancellationToken);
+            var response = await GetUsersImplAsync(page, itemsPerPage, includeTotals: true, q: q,
+                cancellationToken: cancellationToken);
+            return await _client.HandleResponseAsync<UserPagedResponse>(response, cancellationToken);
         }
 
         public async Task<UsersResponse> CreateAsync(UsersRequest request, CancellationToken cancellationToken = default)
@@ -193,7 +202,64 @@ namespace Auth0.Management.Users
             return await _client.HttpClient.GetAsync($"api/v2/users/{id}/logs" + querystring, cancellationToken);
         }
 
+        private async Task<HttpResponseMessage> GetUsersImplAsync(int page = 0, int itemsPerPage = 25, bool? includeTotals = null, string sort = "",
+            string fields = "", bool? includeFields = null, string q = "",
+            SearchEngine? searchEngine = null, string connection = "", CancellationToken cancellationToken = default)
+        {
+            var query = new NameValueCollection();
 
-       
+            if (itemsPerPage != 0)
+            {
+                query.Add("per_page", itemsPerPage.ToString());
+                query.Add("page", page.ToString());
+            }
+
+            if (includeTotals != null)
+            {
+                query.Add("include_totals", includeTotals.ToString().ToLower());
+            }
+
+            if (!string.IsNullOrEmpty(sort))
+            {
+                query.Add("sort", sort);
+            }
+
+            if (!string.IsNullOrEmpty(fields))
+            {
+                query.Add("fields", fields);
+            }
+
+            if (includeFields != null)
+            {
+                query.Add("include_fields", includeFields.ToString().ToLower());
+            }
+
+            if (!string.IsNullOrEmpty(q))
+            {
+                query.Add("q", q.ToLower());
+            }
+
+            if (searchEngine != null)
+            {
+                if (searchEngine == SearchEngine.v1 && !string.IsNullOrEmpty(connection))
+                {
+                    query.Add("connection", connection.ToLower());
+                }
+
+                query.Add("search_engine", searchEngine.ToString().ToLower());
+            }
+
+            var querystring = query.ToQueryString();
+            await _client.SetAuthHeaderAsync(cancellationToken);
+            return await _client.HttpClient.GetAsync($"api/v2/users" + querystring, cancellationToken);
+        }
+
+        public enum SearchEngine
+        {
+            v1,
+            v2,
+            v3
+        }
+
     }
 }
