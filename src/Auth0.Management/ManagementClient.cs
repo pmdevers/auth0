@@ -24,6 +24,7 @@ namespace Auth0.Management
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             PropertyNameCaseInsensitive = false,
+            IgnoreNullValues = true,
         };
 
         public ManagementClient(HttpClient client, ILogger<ManagementClient> logger, ManagementClientSettings settings)
